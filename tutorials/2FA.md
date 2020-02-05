@@ -60,7 +60,7 @@ A successful verification will have the following response:
 }
 ```
 An invalid/failed verification will have the following response:
-```ruby
+```js
 {
   verified: false,
   message: 'Code expired or invalid'
@@ -81,7 +81,7 @@ message -> Here is your code: {code},
 subject -> Verification code
 
 The response contains `codeId` which is a unique ID needed for `verify_code`. The response object can look something like this:
-```ruby
+```js
   {
     codeId: '1fc8907-d336-4707-ad3c'
   }
@@ -98,4 +98,4 @@ The `code` can be:
 + Deleted explicitly if desired (deletion operation does not block the previously started send operation)
 
 ## References
-For all two factor authentication related method details, refer to [Two Factor Authentication](/developer/references/ruby/1.0.0#twofactor-send-code).
+For all two factor authentication related method details, refer to [Two Factor Authentication](/developer/references/nodered/1.0.0#twofactor-send-code).

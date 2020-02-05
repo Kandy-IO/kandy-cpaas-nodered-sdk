@@ -79,7 +79,7 @@ $KANDY$ provides notification for outbound SMS messages, to sync all online clie
 
 The parsed response returned from the `Cpaas::Notification.parse` method can look like this:
 
-```ruby
+```js
 {
   dateTime: 1569218381777,
   destinationAddress: '+12533751556',
@@ -99,4 +99,4 @@ With the help of this notification, clients can sync their view on sent SMS mess
 
 
 ## References
-For all SMS related method details, refer to [SMS](/developer/references/ruby/1.0.0#sms-send).
+For all SMS related method details, refer to [SMS](/developer/references/nodered/1.0.0#sms-send).
