@@ -1,0 +1,27 @@
+{
+  "name": "node-red-contrib-cpaas-sdk",
+  "version": "1.0.0",
+  "description": "Node Red module for CPaaS API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Kandy-IO/kandy-cpaas-nodered-sdk.git"
+  },
+  "author": "KeepWorks",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "node-red": {
+    "nodes": {
+      "auth": "nodes/auth.js",
+      "notification": "nodes/notification.js",
+      "sms": "nodes/sms.js",
+      "twoFactor": "nodes/twoFactor.js"
+    }
+  },
+  "dependencies": {
+    "@kandy-io/cpaas-nodejs-sdk": "^1.1.0",
+    "fs-extra": "^8.1.0"
+  }
+}

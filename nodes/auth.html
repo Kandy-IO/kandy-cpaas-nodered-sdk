@@ -1,0 +1,54 @@
+<script type="text/javascript">
+  RED.nodes.registerType('cpaasbasic', {
+    category: 'config',
+    credentials: {
+      clientId: { type: 'text' },
+      clientSecret: { type: 'password' },
+      baseUrl: { type: 'text' },
+    },
+    defaults: {
+      clientId: { required: true, values: '' },
+      clientSecret: { required: true, values: '' },
+      baseUrl: { required: true, values: '' }
+    },
+    label: function() {
+      return this.clientId;
+    }
+  })
+</script>
+
+<script type="text/x-red" data-template-name="cpaasbasic">
+  <div class="form-row">
+    <label for="node-config-input-clientId"><i class="icon-tag"></i>Client ID</label>
+    <input type="text" id="node-config-input-clientId" placeholder="Client ID">
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-clientSecret"><i class="icon-tag"></i>Client secret</label>
+    <input type="password" id="node-config-input-clientSecret" placeholder="Client secret">
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-baseUrl"><i class="icon-tag"></i>Base URL</label>
+    <input type="text" id="node-config-input-baseUrl" placeholder="Base URL">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="cpaasbasic">
+  <p>Creates a new CPaaS Basic Auth node </p>
+  <h3>Details</h3>
+  <p>Enter your client id and client secret</p>
+  <p>This auth module will be used by nodes that require basic auth.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>Client ID <span class="property-type">string</span></dt>
+    <dd>Private project secret.</dd>
+
+    <dt>Client Secret <span class="property-type">string</span></dt>
+    <dd>Private project secret.</dd>
+
+    <dt>Base URL <span class="property-type">string</span></dt>
+    <dd>URL of the server to be used.</dd>
+  </dl>
+</script>

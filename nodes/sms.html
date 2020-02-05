@@ -1,0 +1,60 @@
+<script type="text/x-red" data-template-name="Send SMS">
+  <div class="form-row">
+    <label for="node-input-creds"></i>CPaaS Credentials</label>
+    <input type="text" id="node-input-creds">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-destinationAddress">Destination address</label>
+    <input type="text" id="node-input-destinationAddress" name="destinationAddress" placeholder="+13153423451">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-senderAddress">Sender address</label>
+    <input type="text" id="node-input-senderAddress" name="senderAddress" placeholder="+13454983094">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-message">Message</label>
+    <input type="text" id="node-input-message" name="message" placeholder="Your message">
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('Send SMS', {
+    category: 'Kandy CPaaS',
+    color: '#a6b1cf',
+    defaults: {
+      creds: { value: '', type:'cpaasbasic' },
+      destinationAddress: { required: true, value: '' },
+      senderAddress: { value: '' },
+      message: { required: true, value: '' },
+    },
+    inputs:1,
+    outputs:1,
+    icon: 'kandy.png',
+    label: 'Send SMS'
+  })
+</script>
+
+<script type="text/x-red" data-help-name="Send SMS">
+  <p>Node to send SMS.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>destinationAddress <span class="property-type">string</span></dt>
+    <dd>Sender address information, the phone number where the message is to be sent.</dd>
+
+    <dt>senderAddress <span class="property-type">string</span></dt>
+    <dd>Sender address information, basically the from address. E164 formatted DID number passed as a value, which is owned by the user.</dd>
+
+    <dt>message <span class="property-type">string</span></dt>
+    <dd>Type of the authentication code delivery method, sms and email are supported types. Possible values: <code>sms</code>, <code>email</code></dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>Resonse<span class="property-type">object</span></dt>
+    <dd><code>msg.cpaas_response</code> will contain the response from the CPaaS API</dd>
+  </dl>
+</script>

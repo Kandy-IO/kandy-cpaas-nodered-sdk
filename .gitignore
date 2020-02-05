@@ -1,0 +1,19 @@
+# Git
+**.orig
+
+# OS X
+.DS_Store
+.DS_Store?
+.AppleDouble
+
+# Folder config file
+Desktop.ini
+
+# Windows shortcuts
+*.lnk
+
+# Node
+.nvmrc
+lib-cov
+node_modules
+cpaas-node-red-files

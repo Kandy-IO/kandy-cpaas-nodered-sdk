@@ -1,0 +1,182 @@
+<script type="text/x-red" data-template-name="2FA">
+  <div class="form-row">
+    <label for="node-input-creds"></i>CPaaS Credentials</label>
+    <input type="text" id="node-input-creds">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-operationType"></i> Operation Type</label>
+    <select id="node-input-operationType" name="operation">
+    </select>
+  </div>
+
+  <div class="input form-row code-id">
+    <label for="node-input-codeId">Code ID</label>
+    <input type="text" id="node-input-codeId" name="method" placeholder="b557b500-a1d2-47ef-9c6b-f1ede9aa73e0">
+  </div>
+
+  <div class="input form-row">
+    <label for="node-input-method">Method</label>
+    <select id="node-input-method" name="method">
+      <option value="sms">SMS</option>
+      <option value="email">Email</option>
+    </select>
+  </div>
+
+  <div class="input form-row subject">
+    <label for="node-input-subject">Subject</label>
+    <input type="text" id="node-input-subject" name="subject" placeholder="Your app's verification code.">
+  </div>
+
+  <div class="input form-row">
+    <label for="node-input-destinationAddress">Destination address</label>
+    <input type="text" id="node-input-destinationAddress" name="destinationAddress" placeholder="+13153423451/name@company.com">
+  </div>
+
+  <div class="input form-row">
+    <label for="node-input-length">Length</label>
+    <input type="number" id="node-input-length" name="length" placeholder="6">
+  </div>
+
+  <div class="input form-row">
+    <label for="node-input-expiry">Expiry</label>
+    <input type="number" id="node-input-expiry" name="expiry" placeholder="60">
+  </div>
+
+  <div class="input form-row">
+    <label for="node-input-format">Format</label>
+    <input type="text" id="node-input-format" name="format" placeholder="numeric/alphanumeric/alphabetic">
+  </div>
+
+  <div class="input form-row">
+    <label for="node-input-message">Message</label>
+    <input type="text" id="node-input-message" name="message" placeholder="Your 2FA code {code}">
+  </div>
+
+  <div class="input form-row verification-code">
+    <label for="node-input-verificationCode">Verification code</label>
+    <input type="text" id="node-input-verificationCode" name="method" placeholder="123234">
+  </div>
+</script>
+
+<script type="text/javascript">
+  var operations = [
+    { value: 'send', text: 'Send 2FA'},
+    { value: 'verify', text: 'Verify 2FA'},
+    { value: 'resend', text: 'Re-send 2FA'},
+    { value: 'delete', text: 'Delete 2FA'},
+  ];
+
+  RED.nodes.registerType('2FA', {
+    category: 'Kandy CPaaS',
+    color: '#a6b1cf',
+    defaults: {
+      creds: { value: '', type:'cpaasbasic' },
+      destinationAddress: { required: (this.operationType === 'send' || this.operationType === 'resend') },
+      message: { required: (this.operationType === 'send' || this.operationType === 'resend')  },
+      method: { required: (this.operationType === 'send' || this.operationType === 'resend') , value: 'sms' },
+      subject: { required: (this.operationType === 'email') },
+      length: { value: '6' },
+      expiry: { value: '120' },
+      format: { value: 'numeric' }, // type is a reserved keyword, used format
+      operationType: { value: 'send' },
+      codeId: { value: '' },
+      verificationCode: { value: '' }
+    },
+    inputs:1,
+    outputs:1,
+    icon: 'kandy.png',
+    label: function() {
+      const operationType = operations.find(op => op.value === this.operationType)
+
+      return this.name || operationType && operationType.text  || '2FA'
+    },
+    oneditprepare: function() {
+      function showHideForm() {
+        const operationType = $('#node-input-operationType').val()
+        const method = $('#node-input-method').val()
+        $('.input').hide()
+        console.log('operationType', operationType)
+        switch (operationType) {
+          case 'send':
+            $('.input').show()
+            $('.verification-code').hide()
+            $('.code-id').hide()
+            break;
+          case 'resend':
+            $('.input').show()
+            $('.verification-code').hide()
+            break;
+          case 'verify':
+            $('.code-id').show()
+            $('.verification-code').show()
+            break;
+          case 'delete':
+            $('.code-id').show()
+            break;
+          default:
+            break;
+        }
+
+        if (method === 'email') {
+          $('.subject').show()
+        } else {
+          $('.subject').hide()
+        }
+      }
+
+      operations.forEach(({ text, value }) => {
+        $('#node-input-operationType').append($('<option></option>').attr('value', value).text(text))
+      })
+
+      // Make sure the selected value is also selected in the <select> tag
+      $('#node-input-operationType').val(this.operationType)
+
+      $('#node-input-operationType').change(showHideForm)
+      $('#node-input-method').change(showHideForm)
+    }
+  })
+</script>
+
+<script type="text/x-red" data-help-name="2FA">
+  <p>Node for implementing two-factor authentication (2FA) flow.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>operationType <span class="property-type">string</span></dt>
+    <dd>Makes the node to do a specific type of operation. Possible values <code>send</code>, <code>resend</code>, <code>verify</code>, <code>delete</code></dd>
+
+    <dt>destinationAddress <span class="property-type">string</span></dt>
+    <dd>Destination address of the authentication code being sent. For sms type authentication codes, it should contain a E164 phone number. For e-mail type authentication codes, it should contain a valid e-mail address.</dd>
+
+    <dt>messsage <span class="property-type">string</span></dt>
+    <dd>Message text sent to the destination, containing the placeholder for the code within the text. CPaaS requires to have <code>{code}</code> string within the text in order to generate a code and inject into the text. For email type code, one usage is to have the <code>{code}</code> string located within the link in order to get a unique link.</dd>
+
+    <dt>method <span class="property-type">string</span></dt>
+    <dd>Type of the authentication code delivery method, sms and email are supported types. Possible values: <code>sms</code>, <code>email</code></dd>
+
+    <dt>subject <span class="property-type">string</span></dt>
+    <dd> When the method is passed as email then subject becomes a mandatory field to pass. The value passed becomes the subject line of the 2FA code email that is sent out to the destinationAddress.</dd>
+
+    <dt>expiry <span class="property-type">integer</span></dt>
+    <dd>Lifetime duration of the code sent in seconds. This can contain values between 30 and 3600 seconds.</dd>
+
+    <dt>length <span class="property-type">integer</span></dt>
+    <dd>Length of the authentication code tha CPaaS should generate for this request. It can contain values between 4 and 10.</dd>
+
+    <dt>format <span class="property-type">string</span></dt>
+    <dd>Type of the code that is generated. If not provided, default value is numeric. Possible values: <code>numeric</code>, <code>alphanumeric</code>, <code>alphabetic</code></dd>
+
+    <dt>codeId <span class="property-type">string</span></dt>
+    <dd>ID of the authentication code. To be passed when operationType is <code>verify</code> or <code>delete</code></dd>
+
+    <dt>verificationCode <span class="property-type">string</span></dt>
+    <dd>Code that is being verified. To be passed when operationType is <code>verify</code></dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>Resonse<span class="property-type">object</span></dt>
+    <dd><code>msg.cpaas_response</code> will contain the response from the CPaaS API</dd>
+  </dl>
+</script>
