@@ -96,7 +96,7 @@
         const operationType = $('#node-input-operationType').val()
         const method = $('#node-input-method').val()
         $('.input').hide()
-        console.log('operationType', operationType)
+
         switch (operationType) {
           case 'send':
             $('.input').show()
@@ -156,7 +156,7 @@
     <dd>Type of the authentication code delivery method, sms and email are supported types. Possible values: <code>sms</code>, <code>email</code></dd>
 
     <dt>subject <span class="property-type">string</span></dt>
-    <dd> When the method is passed as email then subject becomes a mandatory field to pass. The value passed becomes the subject line of the 2FA code email that is sent out to the destinationAddress.</dd>
+    <dd> When the method is passed as <code>email</code> then subject becomes a mandatory field to pass. The value passed becomes the subject line of the 2FA code email that is sent out to the destinationAddress.</dd>
 
     <dt>expiry <span class="property-type">integer</span></dt>
     <dd>Lifetime duration of the code sent in seconds. This can contain values between 30 and 3600 seconds.</dd>
@@ -179,4 +179,13 @@
     <dt>Resonse<span class="property-type">object</span></dt>
     <dd><code>msg.cpaas_response</code> will contain the response from the CPaaS API</dd>
   </dl>
+
+  <h3>Additional details</h3>
+  <ul>
+    <li>All the above values can be passed using msg.payload to the 'in' of this node. Note: CPaaS credentials has to be set in the Properties form, cannot be set dynamically.</li>
+    <li>The values that are passed as JSON would take precedence over the value present in the properties form.</li>
+    <li>The data has to be passed in msg.payload if the form is not used and want to take advantage of the dynamic setting of properties.</li>
+    <li>The data in msg.payload object would remain intact and would be a part of the output. So whatever goes in comes out the same way.</li>
+    <li>The output would contain msg.cpaas_response which is a standard cpaas response object present in all the nodes and msg.payload</li>
+  </ul>
 </script>

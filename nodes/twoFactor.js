@@ -4,16 +4,41 @@ module.exports = function(RED) {
   function twofactor(config) {
     RED.nodes.createNode(this, config)
 
+    const { credentials } = RED.nodes.getNode(config.creds)
+    const client = CpaasSDK.createClient(credentials)
+
     this.on('input', async function(msg) {
-      const { operationType, ...params } = config
-      const { credentials } = RED.nodes.getNode(config.creds)
+      const { operationType, destinationAddress, message, method, subject, length, expiry, format, codeId, verificationCode } = config
+      let requestParams = {}
 
-      const client = CpaasSDK.createClient(credentials)
+      if (operationType === 'send' || operationType === 'resend') {
+        requestParams = { 
+          ...{
+            destinationAddress,
+            message,
+            method,
+            length,
+            expiry,
+            type: format
+         },
+          ...msg.payload
+        }
 
-      const requestParams = { ...params, ...msg.payload }
-      requestParams.type = requestParams.format
+        if (method === 'email') {
+          requestParams.subject = requestParams.subject || subject
+        }
+
+        if (operationType === 'resend') {
+          requestParams.codeId = requestParams.codeId || codeId
+        }
+      } else if (operationType === 'verify') {
+        requestParams = { ...{ codeId, verificationCode }, ...msg.payload }
+      } else if (operationType === 'delete') {
+        requestParams = { ...{ codeId }, ...msg.payload }
+      }
 
       let response = null
+
       try {
         switch (operationType) {
           case 'send':

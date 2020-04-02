@@ -37,7 +37,12 @@
   <h3>Inputs</h3>
   <dl class="message-properties">
     <dt>webhook <span class="property-type">string</span></dt>
-    <dd>HTTPs URL that notifications should be sent to. Note: Should be a <code>POST</code> endpoint.</dd>
+    <dd>
+      HTTPs URL that notifications should be sent to. Note: Should be a <code>POST</code> endpoint.
+      <em>Note:</em> The intended way of setting this is to add an <code>HTTP</code> node which listed under input list (default list of nodes).
+      Join the out node of this HTTP node to the in of the AnalyzeNotification node. The final step would be to add the url to the HTTP node and
+      have the same url in the AnalyzeNotification node as the Webhook URL.
+    </dd>
 
     <dt>destinationAddress <span class="property-type">string</span></dt>
     <dd>The address that incoming messages are received for this subscription. It is suggested to provide the intended E164 formatted DID number within this parameter.</dd>
@@ -48,4 +53,10 @@
     <dt>Resonse<span class="property-type">object</span></dt>
     <dd><code>msg.cpaas_response</code> will contain the response from the CPaaS API</dd>
   </dl>
+
+  <h3>Additional details</h3>
+  <ul>
+    <li>The data in msg.payload object would remain intact and would be a part of the output. So whatever goes in comes out the same way.</li>
+    <li>The output would contain msg.cpaas_response which is a standard cpaas response object present in all the nodes and msg.payload</li>
+  </ul>
 </script>

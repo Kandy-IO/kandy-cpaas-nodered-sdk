@@ -6,11 +6,12 @@ module.exports = function(RED) {
     this.clientSecret = config.clientSecret
     this.baseUrl = config.baseUrl
  }
+
  RED.nodes.registerType('cpaasbasic', cpaasbasic, {
-   credentials: {
-     clientId: { type: 'text' },
-     clientSecret: { type: 'password' },
-     baseUrl: { type: 'text' }
-   }
+    credentials: {
+      clientId: { type: 'text' },
+      clientSecret: { type: 'password' },
+      baseUrl: { type: 'text' }
+    }
  })
 }

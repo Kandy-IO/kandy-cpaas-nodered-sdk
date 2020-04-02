@@ -46,10 +46,10 @@
     <dd>Sender address information, the phone number where the message is to be sent.</dd>
 
     <dt>senderAddress <span class="property-type">string</span></dt>
-    <dd>Sender address information, basically the from address. E164 formatted DID number passed as a value, which is owned by the user.</dd>
+    <dd>Sender address information, basically the from address. E164 formatted DID number passed as a value, which is assigned to a project. If the user wants to let CPaaS uses the default assigned DID number, this field can have the value "default".</dd>
 
     <dt>message <span class="property-type">string</span></dt>
-    <dd>Type of the authentication code delivery method, sms and email are supported types. Possible values: <code>sms</code>, <code>email</code></dd>
+    <dd>SMS text message</dd>
   </dl>
 
   <h3>Outputs</h3>
@@ -57,4 +57,13 @@
     <dt>Resonse<span class="property-type">object</span></dt>
     <dd><code>msg.cpaas_response</code> will contain the response from the CPaaS API</dd>
   </dl>
+
+  <h3>Additional details</h3>
+  <ul>
+    <li>All the above values can be passed using msg.payload to the 'in' of this node. Note: CPaaS credentials has to be set in the Properties form, cannot be set dynamically.</li>
+    <li>The values that are passed as JSON would take precedence over the value present in the properties form.</li>
+    <li>The data has to be passed in msg.payload if the form is not used and want to take advantage of the dynamic setting of properties.</li>
+    <li>The data in msg.payload object would remain intact and would be a part of the output. So whatever goes in comes out the same way.</li>
+    <li>The output would contain msg.cpaas_response which is a standard cpaas response object present in all the nodes and msg.payload</li>
+  </ul>
 </script>

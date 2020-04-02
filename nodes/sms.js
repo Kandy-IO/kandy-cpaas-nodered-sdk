@@ -4,19 +4,17 @@ module.exports = function(RED) {
   function twofactor(config) {
     RED.nodes.createNode(this, config)
 
-    this.on('input', async function(msg) {
-      const { credentials } = RED.nodes.getNode(config.creds)
+    const { credentials } = RED.nodes.getNode(config.creds)
+    const client = CpaasSDK.createClient(credentials)
 
-      const client = CpaasSDK.createClient(credentials)
-      console.log(client)
-      const requestParams = { ...config, ...msg.payload }
+    this.on('input', async function(msg) {
+      const { destinationAddress, senderAddress, message } = config
+      const requestParams = { ...{ destinationAddress, senderAddress, message }, ...msg.payload }
       let response = null
-      console.log('requestParams', requestParams)
+
       try {
         response = await client.conversation.createMessage(requestParams)
-        console.log('response', response)
       } catch (e) {
-        console.log('e', e)
         response = e
       }
 
