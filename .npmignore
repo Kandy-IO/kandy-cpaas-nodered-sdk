@@ -12,3 +12,6 @@
 !/README.md
 !/LICENSE.md
 !/CHANGELOG.md
+
+# Expilcitly blacklist .DS_Store as it appears in tarball contents due to whitelisting of nodes/**/*
+.DS_Store
