@@ -21,7 +21,6 @@
     }
   },
   "dependencies": {
-    "@kandy-io/cpaas-nodejs-sdk": "^1.1.0",
-    "fs-extra": "^8.1.0"
+    "@kandy-io/cpaas-nodejs-sdk": "^1.1.0"
   }
 }

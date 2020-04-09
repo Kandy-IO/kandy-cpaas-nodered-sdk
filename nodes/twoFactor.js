@@ -12,7 +12,7 @@ module.exports = function(RED) {
       let requestParams = {}
 
       if (operationType === 'send' || operationType === 'resend') {
-        requestParams = { 
+        requestParams = {
           ...{
             destinationAddress,
             message,

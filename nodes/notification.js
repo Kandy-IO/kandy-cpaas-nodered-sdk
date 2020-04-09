@@ -1,87 +1,45 @@
 const CpaasSDK = require('@kandy-io/cpaas-nodejs-sdk')
-const fse = require('fs-extra')
-const path = require('path')
 
-const FILE_NAME = 'webhooks.json'
-const PATH = path.join(__dirname, '/cpaas-node-red-files/', FILE_NAME)
-
-async function ensureFileExists() {
-  const fileExists = await fse.pathExists(PATH)
-
-  if (!fileExists) {
-    await fse.writeJson(PATH, { default: [] })
-  }
-}
-
-async function injectWebhook(webhook, destinationAddress) {
-  try {
-    await ensureFileExists()
-
-    const linkedDestination = destinationAddress || 'default'
-    const webhooks = await fse.readJson(PATH)
-
-    if (!webhooks[linkedDestination]) {
-      webhooks[linkedDestination] = []
-    }
-
-    webhooks[linkedDestination].push(webhook)
-
-    await fse.writeJson(PATH, webhooks)
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-async function isWebhookPresent(webhook, destinationAddress) {
-  try {
-    await ensureFileExists()
-
-    const webhooks = await fse.readJson(PATH)
-    const linkedDestination = destinationAddress || 'default'
-
-    if (webhooks[linkedDestination]) {
-      for(let i = 0; i < webhooks[linkedDestination].length; i++) {
-        if (webhooks[linkedDestination][i] === webhook) {
-          return true
-        }
-      }
-    }
-
-    return false
-
-  } catch (err) {
-    console.error(err)
-  }
-}
+const WEBHOOK_KEY = 'cpaas-sdk-subscribed-webhooks'
 
 module.exports = function(RED) {
   function analyzeNotification(config) {
     RED.nodes.createNode(this, config)
 
     const { credentials } = RED.nodes.getNode(config.creds)
-    const { webhook, destinationAddress } = config
+    const { webhook, destinationAddress, storage } = config
+    const destination = destinationAddress || 'default'
+    const context = this.context().global
+    const storageType = (storage && storage.trim()) || 'default'
+    const hooks = context.get(WEBHOOK_KEY, storageType) || {}
+    const isWebhookRegistered = (hooks[destination] || []).some(h => h.includes(webhook))
     const client = CpaasSDK.createClient(credentials)
 
-    isWebhookPresent(webhook, destinationAddress)
-      .then(async isSubscribed => {
-        if (!isSubscribed && webhook) {
-          try {
-            const params = { webhookURL: webhook }
+    function registerWebhook() {
+      const hooksList = hooks && (hooks[destination] || [])
 
-            if (destinationAddress) {
-              params.destinationAddress = destinationAddress
-            }
+      hooksList.push(webhook)
 
-            await client.conversation.subscribe(params)
+      context.set(WEBHOOK_KEY, {
+        ...hooks,
+        [destination]: hooksList
+      }, storageType)
+    }
 
-            injectWebhook(webhook, destinationAddress)
-          } catch (e) {
-            console.error(e)
-          }
-        }
-      }).catch(e => {
-        console.error(e)
-      })
+    if (!isWebhookRegistered) {
+      const params = { webhookURL: webhook }
+
+      if (destinationAddress) {
+        params.destinationAddress = destinationAddress
+      }
+
+      client.conversation.subscribe(params)
+        .then(registerWebhook)
+        .error(e => {
+          this.error(`Failed to subscribe webhook endpoint: ${webhook}`, e)
+          console.error(e)
+        })
+    }
 
     this.on('input', async function(msg) {
       const response = client.notification.parse(msg.payload)

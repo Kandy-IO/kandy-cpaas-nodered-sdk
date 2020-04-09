@@ -13,6 +13,12 @@
     <label for="node-input-destinationAddress">Destination address</label>
     <input type="text" id="node-input-destinationAddress" name="destinationAddress" placeholder="+13153423451">
   </div>
+
+
+  <div class="form-row">
+    <label for="node-input-storage">Storage</label>
+    <input type="text" id="node-input-storage" name="storage">
+  </div>
 </script>
 
 <script type="text/javascript">
@@ -22,7 +28,8 @@
     defaults: {
       creds: { value: '', type:'cpaasbasic' },
       webhook: { required: true, value: '' },
-      destinationAddress: { value: '' }
+      destinationAddress: { value: '' },
+      storage: { value: 'default', required: true }
     },
     inputs:1,
     outputs:1,
@@ -38,7 +45,13 @@
   <dl class="message-properties">
     <dt>webhook <span class="property-type">string</span></dt>
     <dd>
-      HTTPs URL that notifications should be sent to. Note: Should be a <code>POST</code> endpoint.
+      Publicly accessible HTTPs URL that notifications should be sent to. Note: Should be a <code>POST</code> endpoint. The value should have the domain of the server.
+      For example if the endpoint added is <code>/webhook</code> and your domain is www.mytest.com then the value for webhook would be
+      <br />
+      <code>https://wwww.mytest.com/webhook</code>
+      <br />
+      If you are running your application on localhost then you need to make your local server public and that can be done by using ngrok or Localtunnel or any other tunnelling service.
+      <br /> <br />
       <em>Note:</em> The intended way of setting this is to add an <code>HTTP</code> node which listed under input list (default list of nodes).
       Join the out node of this HTTP node to the in of the AnalyzeNotification node. The final step would be to add the url to the HTTP node and
       have the same url in the AnalyzeNotification node as the Webhook URL.
@@ -46,6 +59,9 @@
 
     <dt>destinationAddress <span class="property-type">string</span></dt>
     <dd>The address that incoming messages are received for this subscription. It is suggested to provide the intended E164 formatted DID number within this parameter.</dd>
+
+    <dt>storage <span class="property-type">string</span></dt>
+    <dd>This attribute dictates as to what storage type should be used to store subscription related metadata.  Check the IMPORTANT section below for more information.</dd>
   </dl>
 
   <h3>Outputs</h3>
@@ -59,4 +75,42 @@
     <li>The data in msg.payload object would remain intact and would be a part of the output. So whatever goes in comes out the same way.</li>
     <li>The output would contain msg.cpaas_response which is a standard cpaas response object present in all the nodes and msg.payload</li>
   </ul>
+
+  <h3>IMPORTANT!</h3>
+  <p>
+    The Analyze Notification node stores certain metadata in the global context. By default the storage of Node-RED is set to memory but in order to presist
+    this metadata over application restart, this metadata has to be stored in some persistent data storage system. One of the data storage that is natively
+    supported by Node-RED is localfilesystem, which is an ideal place to store this meta data.
+    <br /><br />
+    To know more about storages you can check Node-RED official documentation or go through
+    <a href="https://discourse.nodered.org/t/a-guide-to-understanding-persistent-context/4115" target="_blank">this</a>
+    which perfectly explains the basics of storage
+
+    <br /><br />
+    Once the storage have been defined, you have let the Analyze Notification know what storage you want to use.
+    <br />
+    <b>Storage (storage) </b> - You can enter the key of the storage that you want to use defined under <code>contextStorage</code> in settings.js. The storage 
+    key that is entered here would be used as the storage method by the Analyze Notification node.
+    
+    <br /><br />
+    <h4>Example</h4>
+
+    <pre>
+      contextStorage: {
+        default: {
+            module: "memory"
+        },
+        local: {
+           module: "localfilesystem"
+        }
+      }
+    </pre>
+
+    <br/>
+    Let's say you have the above configuration in settings.js. Now if you pass the value <code>default</code> to the <code>Storage</code> field then
+    The memory storage would be used, if <code>local</code> is passed then the localfilesystem would be used as storage.
+    <br /><br />
+
+    Note: It is highly recommended that you use <code>localfilesystem</code> rather than <code>memory</code>
+  </p>
 </script>
