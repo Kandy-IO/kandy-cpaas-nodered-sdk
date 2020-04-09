@@ -1,8 +1,7 @@
 {
-  "name": "node-red-contrib-cpaas-sdk",
+  "name": "@kandy-io/node-red-contrib-cpaas-sdk",
   "version": "1.0.0",
   "description": "Node Red module for CPaaS API",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +11,11 @@
   },
   "author": "KeepWorks",
   "license": "SEE LICENSE IN LICENSE.md",
+  "keywords": [
+    "node-red",
+    "2fa",
+    "sms"
+  ],
   "node-red": {
     "nodes": {
       "auth": "nodes/auth.js",

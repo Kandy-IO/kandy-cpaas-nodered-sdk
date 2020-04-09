@@ -5,7 +5,7 @@
 Run the following command in your Node-RED user directory - typically ~/.node-red
 
 ```bash
-npm install node-red-contrib-cpaas-sdk
+npm install @kandy-io/node-red-contrib-cpaas-sdk
 ```
 
 ## Reference

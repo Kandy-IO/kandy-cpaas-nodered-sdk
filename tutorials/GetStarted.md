@@ -9,10 +9,10 @@ To begin, you will need to install the Node-RED library in your application. The
 Run the following command in your Node-RED user directory - typically ~/.node-red
 
 ```bash
-npm install node-red-contrib-cpaas-sdk
+npm install @kandy-io/node-red-contrib-cpaas-sdk
 ```
 
-Or install it via the `Manage Palette` in the Node-RED dashboard by searching for `node-red-contrib-cpaas-sdk`
+Or install it via the `Manage Palette` in the Node-RED dashboard by searching for `@kandy-io/node-red-contrib-cpaas-sdk`
 
 ## Configuration
 Each node must have `CPaaS Credentials` before using it which are the configuration credentials for the project. The credentials are `Client ID`, `Client secret` and `Base URL`. Once a credential node is created it can be reused in other nodes.

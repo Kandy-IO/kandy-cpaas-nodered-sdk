@@ -12,6 +12,9 @@ Desktop.ini
 # Windows shortcuts
 *.lnk
 
+# npm
+.npmrc
+
 # Node
 .nvmrc
 lib-cov
