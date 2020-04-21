@@ -1,5 +1,10 @@
 <script type="text/x-red" data-template-name="Send SMS">
   <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+
+  <div class="form-row">
     <label for="node-input-creds"></i>CPaaS Credentials</label>
     <input type="text" id="node-input-creds">
   </div>
@@ -26,14 +31,17 @@
     color: '#a6b1cf',
     defaults: {
       creds: { value: '', type:'cpaasbasic' },
+      name: { value: '' },
       destinationAddress: { required: true, value: '' },
       senderAddress: { value: '' },
       message: { required: true, value: '' },
     },
-    inputs:1,
-    outputs:1,
+    inputs: 1,
+    outputs: 1,
     icon: 'kandy.png',
-    label: 'Send SMS'
+    label: function () {
+      return this.name.trim() || 'Send SMS'
+    }
   })
 </script>
 

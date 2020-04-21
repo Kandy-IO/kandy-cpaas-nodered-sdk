@@ -1,5 +1,10 @@
 <script type="text/x-red" data-template-name="Analyze Notification">
   <div class="form-row">
+    <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+
+  <div class="form-row">
     <label for="node-input-creds"></i>CPaaS Credentials</label>
     <input type="text" id="node-input-creds">
   </div>
@@ -27,6 +32,7 @@
     color: '#a6b1cf',
     defaults: {
       creds: { value: '', type:'cpaasbasic' },
+      name: { value: '' },
       webhook: { required: true, value: '' },
       destinationAddress: { value: '' },
       storage: { value: 'default', required: true }
@@ -34,7 +40,9 @@
     inputs:1,
     outputs:1,
     icon: 'kandy.png',
-    label: 'Analyze Notification'
+    label: function() {
+      return this.name.trim() || 'Analyze Notification'
+    }
   })
 </script>
 
@@ -89,9 +97,9 @@
     <br /><br />
     Once the storage have been defined, you have let the Analyze Notification know what storage you want to use.
     <br />
-    <b>Storage (storage) </b> - You can enter the key of the storage that you want to use defined under <code>contextStorage</code> in settings.js. The storage 
+    <b>Storage (storage) </b> - You can enter the key of the storage that you want to use defined under <code>contextStorage</code> in settings.js. The storage
     key that is entered here would be used as the storage method by the Analyze Notification node.
-    
+
     <br /><br />
     <h4>Example</h4>
 
