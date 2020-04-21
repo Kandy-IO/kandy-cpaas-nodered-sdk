@@ -78,10 +78,10 @@
     defaults: {
       creds: { value: '', type:'cpaasbasic' },
       name: { value: '' },
-      destinationAddress: { required: (this.operationType === 'send' || this.operationType === 'resend') },
-      message: { required: (this.operationType === 'send' || this.operationType === 'resend')  },
-      method: { required: (this.operationType === 'send' || this.operationType === 'resend') , value: 'sms' },
-      subject: { required: (this.operationType === 'email') },
+      destinationAddress: { value: '' },
+      message: { value: ''  },
+      method: { value: 'sms' },
+      subject: { value: '' },
       length: { value: '6' },
       expiry: { value: '120' },
       format: { value: 'numeric' }, // type is a reserved keyword, used format
