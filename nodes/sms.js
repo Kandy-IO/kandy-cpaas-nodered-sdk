@@ -8,8 +8,12 @@ module.exports = function(RED) {
     const client = CpaasSDK.createClient(credentials)
 
     this.on('input', async function(msg) {
-      const { destinationAddress, senderAddress, message } = config
-      const requestParams = { ...{ destinationAddress, senderAddress, message }, ...msg.payload }
+      const { destinationAddress, senderAddress, message } = { ...config, ...msg.payload }
+      const requestParams = {
+        destinationAddress,
+        senderAddress: senderAddress.trim() || 'default',
+        message
+      }
       let response = null
 
       try {

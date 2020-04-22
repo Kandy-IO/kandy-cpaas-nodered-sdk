@@ -8,33 +8,41 @@ module.exports = function(RED) {
     const client = CpaasSDK.createClient(credentials)
 
     this.on('input', async function(msg) {
-      const { operationType, destinationAddress, message, method, subject, length, expiry, format, codeId, verificationCode } = config
+      const {
+        operationType,
+        destinationAddress,
+        message,
+        method,
+        subject,
+        length,
+        expiry,
+        format,
+        codeId,
+        verificationCode
+      } = { ...config, ...msg.payload }
       let requestParams = {}
 
       if (operationType === 'send' || operationType === 'resend') {
         requestParams = {
-          ...{
-            destinationAddress,
-            message,
-            method,
-            length,
-            expiry,
-            type: format
-         },
-          ...msg.payload
+          destinationAddress,
+          message,
+          method,
+          length,
+          expiry,
+          type: format
         }
 
         if (method === 'email') {
-          requestParams.subject = requestParams.subject || subject
+          requestParams.subject = subject
         }
 
         if (operationType === 'resend') {
-          requestParams.codeId = requestParams.codeId || codeId
+          requestParams.codeId = codeId
         }
       } else if (operationType === 'verify') {
-        requestParams = { ...{ codeId, verificationCode }, ...msg.payload }
+        requestParams = { codeId, verificationCode }
       } else if (operationType === 'delete') {
-        requestParams = { ...{ codeId }, ...msg.payload }
+        requestParams = { codeId }
       }
 
       let response = null
