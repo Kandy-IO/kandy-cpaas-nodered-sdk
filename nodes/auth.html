@@ -7,17 +7,23 @@
       baseUrl: { type: 'text' },
     },
     defaults: {
+      name: { value: '' },
       clientId: { required: true, values: '' },
       clientSecret: { required: true, values: '' },
       baseUrl: { required: true, values: '' }
     },
     label: function() {
-      return this.clientId;
+      return this.name || this.clientId
     }
   })
 </script>
 
 <script type="text/x-red" data-template-name="cpaasbasic">
+  <div class="form-row">
+    <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
+    <input type="text" id="node-config-input-name" placeholder="Name">
+  </div>
+
   <div class="form-row">
     <label for="node-config-input-clientId"><i class="icon-tag"></i>Client ID</label>
     <input type="text" id="node-config-input-clientId" placeholder="Client ID">
