@@ -50,28 +50,55 @@
 
   <h3>Inputs</h3>
   <dl class="message-properties">
-    <dt>destinationAddress <span class="property-type">string</span></dt>
-    <dd>Sender address information, the phone number where the message is to be sent.</dd>
+    <dt>Destination address <br />(destinationAddress) <span class="property-type">string</span></dt>
+    <dd>Destination address information, the phone number where the message is to be sent.</dd>
 
-    <dt>senderAddress <span class="property-type">string</span></dt>
-    <dd>Sender address information, basically the from address. E164 formatted DID number passed as a value, which is assigned to a project. If the user wants to let CPaaS uses the default assigned DID number, this field can have the value "default".</dd>
+    <dt>Sender address <br />(senderAddress) <span class="property-type">string</span></dt>
+    <dd>Sender address information, basically the from address. E164 formatted DID number passed as a value, which is assigned to a project. If the user wants to let CPaaS use the default assigned DID number, this field can have the value "default". If this field is left blank then internally, "default" value is used.</dd>
 
-    <dt>message <span class="property-type">string</span></dt>
+    <dt>Message <br />(message) <span class="property-type">string</span></dt>
     <dd>SMS text message</dd>
   </dl>
 
   <h3>Outputs</h3>
   <dl class="message-properties">
-    <dt>Resonse<span class="property-type">object</span></dt>
+    <dt>Response<span class="property-type">object</span></dt>
     <dd><code>msg.cpaas_response</code> will contain the response from the CPaaS API</dd>
+    <br />
   </dl>
 
   <h3>Additional details</h3>
-  <ul>
-    <li>All the above values can be passed using msg.payload to the 'in' of this node. Note: CPaaS credentials has to be set in the Properties form, cannot be set dynamically.</li>
-    <li>The values that are passed as JSON would take precedence over the value present in the properties form.</li>
-    <li>The data has to be passed in msg.payload if the form is not used and want to take advantage of the dynamic setting of properties.</li>
-    <li>The data in msg.payload object would remain intact and would be a part of the output. So whatever goes in comes out the same way.</li>
-    <li>The output would contain msg.cpaas_response which is a standard cpaas response object present in all the nodes and msg.payload</li>
-  </ul>
+  <dl class="message-properties">
+    <br />
+    <ul>
+      <li>All the above values can be passed using msg.payload to the 'in' of this node. Note: CPaaS credentials has to be set in the Properties form, cannot be set dynamically.</li>
+      <li>The values that are passed dynamically would take precedence over the value present in the properties form.</li>
+      <li>The data in msg.payload object would remain intact and would be a part of the output. So whatever goes in, comes out the same way.</li>
+      <li>The output would contain msg.cpaas_response which is a standard cpaas response object present in all the nodes and msg.payload</li>
+    </ul>
+    <br />
+  </dl>
+
+  <h3>How to use dynamic values</h3>
+  <dl class="message-properties">
+    <br />
+    <dd>To pass the values to the node programmatically or dynamically, the parameters has to set in msg.payload.</dd>
+    <dd>For example</dd>
+    <dd>
+      <pre>
+        msg.payload = {
+          destinationAddress: '+15438135800',
+          senderAddress: '+1663773441',
+          message: 'Hey!'
+        };
+      </pre>
+    </dd>
+
+    <dd>
+      Note: The node accepts partial parameters dynamically. For example you can set the destination and
+      sender address in the node properties form and send only message part dynamically. If the message
+      is set in the properties form, then passing the message dynamically would override the value in the properties form.
+    </dd>
+    <br />
+  </dl>
 </script>

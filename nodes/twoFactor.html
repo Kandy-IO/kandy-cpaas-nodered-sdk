@@ -149,49 +149,79 @@
 
   <h3>Inputs</h3>
   <dl class="message-properties">
-    <dt>operationType <span class="property-type">string</span></dt>
-    <dd>Makes the node to do a specific type of operation. Possible values <code>send</code>, <code>resend</code>, <code>verify</code>, <code>delete</code></dd>
-
-    <dt>destinationAddress <span class="property-type">string</span></dt>
+    <dt>Operation Type <br /> (operationType) <span class="property-type">string</span></dt>
+    <dd>Makes the node to do a specific type of operation. Possible values when set dynamically: <code>send</code>, <code>resend</code>, <code>verify</code>, <code>delete</code></dd>
+    <br />
+    <dt>Destination address <br /> (destinationAddress) <span class="property-type">string</span></dt>
     <dd>Destination address of the authentication code being sent. For sms type authentication codes, it should contain a E164 phone number. For e-mail type authentication codes, it should contain a valid e-mail address.</dd>
-
-    <dt>messsage <span class="property-type">string</span></dt>
-    <dd>Message text sent to the destination, containing the placeholder for the code within the text. CPaaS requires to have <code>{code}</code> string within the text in order to generate a code and inject into the text. For email type code, one usage is to have the <code>{code}</code> string located within the link in order to get a unique link.</dd>
-
-    <dt>method <span class="property-type">string</span></dt>
-    <dd>Type of the authentication code delivery method, sms and email are supported types. Possible values: <code>sms</code>, <code>email</code></dd>
-
-    <dt>subject <span class="property-type">string</span></dt>
-    <dd> When the method is passed as <code>email</code> then subject becomes a mandatory field to pass. The value passed becomes the subject line of the 2FA code email that is sent out to the destinationAddress.</dd>
-
-    <dt>expiry <span class="property-type">integer</span></dt>
+    <br />
+    <dt>Message <br /> (message) <span class="property-type">string</span></dt>
+    <dd>Message text sent to the destination, containing the placeholder for the code within the text. CPaaS requires to have <code>{code}</code> string within the text in order to generate a code and inject into the text.</dd>
+    <br />
+    <dt>Method <br /> (method) <span class="property-type">string</span></dt>
+    <dd>Type of the authentication code delivery method, sms and email are supported types. Possible values when set dynamically: <code>sms</code>, <code>email</code></dd>
+    <br />
+    <dt>Subject <br /> (subject) <span class="property-type">string</span></dt>
+    <dd>When the method is set as <code>email</code>, the subject becomes a mandatory field. The value passed becomes the subject line of the 2FA code email that is sent out to the destination address.</dd>
+    <br />
+    <dt>Expiry <br /> (expiry) <span class="property-type">integer</span></dt>
     <dd>Lifetime duration of the code sent in seconds. This can contain values between 30 and 3600 seconds.</dd>
-
-    <dt>length <span class="property-type">integer</span></dt>
-    <dd>Length of the authentication code tha CPaaS should generate for this request. It can contain values between 4 and 10.</dd>
-
-    <dt>format <span class="property-type">string</span></dt>
+    <br />
+    <dt>Length <br /> (length) <span class="property-type">integer</span></dt>
+    <dd>Length of the authentication code that CPaaS should generate for this request. It can contain values between 4 and 10.</dd>
+    <br />
+    <dt>Format <br /> (format) <span class="property-type">string</span></dt>
     <dd>Type of the code that is generated. If not provided, default value is numeric. Possible values: <code>numeric</code>, <code>alphanumeric</code>, <code>alphabetic</code></dd>
-
-    <dt>codeId <span class="property-type">string</span></dt>
+    <br />
+    <dt>Code ID <br /> (codeId) <span class="property-type">string</span></dt>
     <dd>ID of the authentication code. To be passed when operationType is <code>verify</code> or <code>delete</code></dd>
-
-    <dt>verificationCode <span class="property-type">string</span></dt>
+    <br />
+    <dt>Verification code <br /> (verificationCode) <span class="property-type">string</span></dt>
     <dd>Code that is being verified. To be passed when operationType is <code>verify</code></dd>
+    <br />
   </dl>
 
   <h3>Outputs</h3>
   <dl class="message-properties">
-    <dt>Resonse<span class="property-type">object</span></dt>
+    <dt>Response<span class="property-type">object</span></dt>
     <dd><code>msg.cpaas_response</code> will contain the response from the CPaaS API</dd>
+    <br />
   </dl>
 
   <h3>Additional details</h3>
-  <ul>
-    <li>All the above values can be passed using msg.payload to the 'in' of this node. Note: CPaaS credentials has to be set in the Properties form, cannot be set dynamically.</li>
-    <li>The values that are passed as JSON would take precedence over the value present in the properties form.</li>
-    <li>The data has to be passed in msg.payload if the form is not used and want to take advantage of the dynamic setting of properties.</li>
-    <li>The data in msg.payload object would remain intact and would be a part of the output. So whatever goes in comes out the same way.</li>
-    <li>The output would contain msg.cpaas_response which is a standard cpaas response object present in all the nodes and msg.payload</li>
-  </ul>
+  <dl class="message-properties">
+    <br />
+    <ul>
+      <li>All the above values can be passed using msg.payload to the 'in' of this node. Note: CPaaS credentials has to be set in the Properties form, cannot be set dynamically.</li>
+      <li>The values that are passed dynamically would take precedence over the value present in the properties form.</li>
+      <li>The data in msg.payload object would remain intact and would be a part of the output. So whatever goes in, comes out the same way.</li>
+      <li>The output would contain msg.cpaas_response which is a standard cpaas response object present in all the nodes and msg.payload</li>
+    </ul>
+  </dl>
+
+  <h3>How to use dynamic values</h3>
+  <dl class="message-properties">
+    <br />
+    <dd>To pass the values to the node programmatically or dynamically, the parameters has to set in msg.payload.</dd>
+    <dd>For example</dd>
+    <dd>
+      <pre>
+        msg.payload = {
+          operationType: 'send',
+          destinationAddress: '+15438135800',
+          senderAddress: '+1663773441',
+          message: 'Your 2FA authentication code: {code}',
+          method: 'sms',
+          expiry: 60,
+          length: 8
+        };
+      </pre>
+    </dd>
+    <dd>
+      Note: The node accepts partial parameters dynamically. For example you can set the destination and
+      sender address in the node properties form and send only message part dynamically. If the message
+      is set in the properties form, then passing the message dynamically would override the value in the properties form.
+    </dd>
+    <br />
+  </dl>
 </script>
