@@ -1,4 +1,4 @@
-# kandy-cpaas-nodered-sdk
+# Kandy CPaaS Node-RED SDK
 
 ## Installation
 
@@ -8,10 +8,10 @@ Run the following command in your Node-RED user directory - typically ~/.node-re
 npm install @kandy-io/node-red-contrib-cpaas-sdk
 ```
 
-## Reference
+## Documentation
 
 The information about tutorials can be found in the link below
 
 * `Documents`: The documentation can be found in the dashboard inline to the selected node.
 
-* `Tutorials`:  [Get Started](https://Kandy-IO.github.io/kandy-cpaas-nodered-sdk/tutorials/?KANDY=Kandy&KANDYFQDN=https://oauth-cpaas.att.com#/GetStarted)
+* `Tutorials`:  [User Guide](https://Kandy-IO.github.io/kandy-cpaas-nodered-sdk/tutorials/?KANDY=Kandy&KANDYFQDN=https://oauth-cpaas.att.com#/GetStarted)
