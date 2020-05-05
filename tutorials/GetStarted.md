@@ -15,22 +15,24 @@ npm install @kandy-io/node-red-contrib-cpaas-sdk
 Or install it via the `Manage Palette` in the Node-RED dashboard by searching for `@kandy-io/node-red-contrib-cpaas-sdk`
 
 ## Configuration
-Each node must have `CPaaS Credentials` before using it which are the configuration credentials for the project. The credentials are `Client ID`, `Client secret` and `Base URL`. Once a credential node is created it can be reused in other nodes.
+Each node must have `CPaaS Credentials` before using it which can be either be a project's or account's credentials. The `Authentication type` in `CPaaS Credentials` form dictates as to which authentication method is to be used (project or account). Once the required method is selected, some extra fields may appear according to requirement. Once a credential node is created it can be reused in other nodes.
 
 Before starting, you need to learn following information from your CPaaS account, specifically from Developer Portal.
 
-Log into your Developer Portal account and the configuration information required to be authenticated should be under:
+Log into your Developer Portal account. If you want to authenticate using CPaaS user credentials, the configuration information required should be under:
++ Home -> Personal Profile (top right corner) -> Details
+> + `Account client ID` should be mapped to `client ID`
+> + `Email` should be mapped to `Email`
+> + Your account password should be mapped to `Password`
+
+Alternatively if you want to use your project's credentials, the configuration information required should be under:
 
 + `Projects` -> `{your project}` -> `Project info`/`Project secret`
-
 > + `Private Project key` should be mapped to `Client ID`
 > + `Private Project secret` should be mapped to `Client secret`
 
-`Client ID` -> <Private Project key>
-`Client secret` -> <Private Project secret>
+The Base URL value is same for both the type of authentication method.
 `Base URL` -> $KANDYFQDN$
-
-## Usage
 
 ### Input
 

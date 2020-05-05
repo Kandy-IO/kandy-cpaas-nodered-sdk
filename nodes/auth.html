@@ -3,17 +3,56 @@
     category: 'config',
     credentials: {
       clientId: { type: 'text' },
-      clientSecret: { type: 'password' },
       baseUrl: { type: 'text' },
+      clientSecret: { type: 'password' },
+      email: { type: 'text' },
+      password: { type: 'password' }
     },
     defaults: {
       name: { value: '' },
-      clientId: { required: true, values: '' },
-      clientSecret: { required: true, values: '' },
-      baseUrl: { required: true, values: '' }
+      authenticationType: { value: 'project' },
+      baseUrl: { required: true, value: '' },
+      clientId: { required: true, value: '' },
+      clientSecret: { value: '' },
+      email: { value: '' },
+      password: { value: '' }
     },
     label: function() {
       return this.name || this.clientId
+    },
+    oneditprepare: function() {
+      const authenticationType = $('#node-config-input-authenticationType')
+      const authTypes = [
+        { value: 'project', text: 'Project' },
+        { value: 'account', text: 'Account' }
+      ]
+
+      function showHideForm() {
+        if (authenticationType.val() === 'project') {
+          $('.project-credentials').show()
+
+          // reset account inputs
+          $('#node-config-input-email').val('')
+          $('#node-config-input-password').val('')
+          $('.account-credentials').hide()
+        } else {
+          $('.account-credentials').show()
+
+          // reset project inputs
+          $('#node-config-input-clientSecret').val('')
+          $('.project-credentials').hide()
+        }
+      }
+
+
+      authTypes.forEach(({ text, value }) => {
+        authenticationType.append($('<option></option>').attr('value', value).text(text))
+      })
+
+      // Make sure the selected value is also selected in the <select> tag
+      authenticationType.val(this.authenticationType || 'project')
+
+      authenticationType.on('change', showHideForm)
     }
   })
 </script>
@@ -25,13 +64,29 @@
   </div>
 
   <div class="form-row">
+    <label for="node-config-input-authenticationType"></i> Authentication Type</label>
+    <select id="node-config-input-authenticationType" name="authenticationType">
+    </select>
+  </div>
+
+  <div class="form-row">
     <label for="node-config-input-clientId"><i class="icon-tag"></i>Client ID</label>
     <input type="text" id="node-config-input-clientId" placeholder="Client ID">
   </div>
 
-  <div class="form-row">
+  <div class="form-row project-credentials">
     <label for="node-config-input-clientSecret"><i class="icon-tag"></i>Client secret</label>
     <input type="password" id="node-config-input-clientSecret" placeholder="Client secret">
+  </div>
+
+  <div class="form-row account-credentials">
+    <label for="node-config-input-email"><i class="icon-tag"></i>Email</label>
+    <input type="text" id="node-config-input-email" placeholder="Email">
+  </div>
+
+  <div class="form-row account-credentials">
+    <label for="node-config-input-password"><i class="icon-tag"></i>Password</label>
+    <input type="password" id="node-config-input-password" placeholder="Password">
   </div>
 
   <div class="form-row">
@@ -43,18 +98,52 @@
 <script type="text/x-red" data-help-name="cpaasbasic">
   <p>Creates a new CPaaS Basic Auth node </p>
   <h3>Details</h3>
-  <p>Enter your client id and client secret</p>
   <p>This auth module will be used by nodes that require basic auth.</p>
 
   <h3>Inputs</h3>
   <dl class="message-properties">
-    <dt>Client ID <span class="property-type">string</span></dt>
-    <dd>Private project key.</dd>
+    <dt>Authentication Type</dt>
+      This enables the type of authentication mode to be used.
+    <dd></dd>
 
-    <dt>Client Secret <span class="property-type">string</span></dt>
+    <dt>Client ID<span class="property-type">string</span></dt>
+    <dd>Private project key / Account client ID. If Private project key is used then <code>Client secret</code> is mandatory. If account client ID is used then <code>email</code> and <code>password</code> are mandatory.</dd>
+
+    <dt>Client secret<span class="property-type">string</span></dt>
     <dd>Private project secret.</dd>
+
+    <dt>Email<span class="property-type">string</span></dt>
+    <dd>Account login email.</dd>
+
+    <dt>Password<span class="property-type">string</span></dt>
+    <dd>Account login password</dd>
 
     <dt>Base URL <span class="property-type">string</span></dt>
     <dd>URL of the server to be used.</dd>
+  </dl>
+
+  <h3>Authentication credentials</h3>
+  <dl class="message-properties">
+    <dd>Before starting, you need to learn following information from your CPaaS account, specifically from Developer Portal.</dd>
+    <dd>There are two ways you can authenticate, one is by using project's keys and the other is by using your account's credentials</dd>
+    <dd>The <code>Authentication Type</code> dictates as to which authentication method you want to use.</dd>
+
+    <br />
+
+    <dd>If you want to authenticate using CPaaS account's credentials, the configuration information required should be under:</dd>
+    <dd>Home -> Personal Profile (top right corner) -> Details</dd>
+    <ul>
+      <li><code>Account client ID</code> should be mapped to <code>Client ID</code></li>
+
+      <li><code>Email</code> should be mapped to <code>Email</code></li>
+      <li> Your account password should be mapped to <code>password</code></li>
+    </ul>
+
+    <dd>Alternatively if you want to use your project's credentials, the configuration information required should be under:</dd>
+    <dd>Projects -> {your project} -> Project info / Project secret</dd>
+    <ul>
+      <li><code>Private Project key</code> should be mapped to <code>Client ID</code></li>
+      <li><code>Private Project secret</code> should be mapped to <code>Client secret</code></li>
+    </ul>
   </dl>
 </script>

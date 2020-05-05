@@ -16,7 +16,7 @@ The following diagram explains a sample use case and its logical flow for two-fa
 6. MyApp web server sends validation request to $KANDY$ with the code user entered and receives the result
 7. MyApp web page takes the action based on the result
 
-Your $KANDY$ admin can purchase SMS DID and assign to the MyApp project, so that the two-factor authentication SMS sent to app users always has the same originating number seen on the phone. Otherwise, the number seen on app users' phones may differ per transaction.
+Your $KANDY$ admin can purchase SMS DID and assign to the MyApp project or user, so that the two-factor authentication SMS sent to app users always has the same originating number seen on the phone. Otherwise, the number seen on app users' phones may differ per transaction.
 
 First, MyApp web server sends request to send a two-factor authentication code. This can be done by using the `2FA` node. This 2FA node has to be configured to send a verification code by selecting the `Operation Type` as `Send 2FA`. The the relevant information has to be passed down to the form such as:
 
@@ -96,6 +96,3 @@ The `code` can be:
 
 + Resend using the same resource, which "invalidates" the previously sent code and triggers a new SMS or email containing a new code.
 + Deleted explicitly if desired (deletion operation does not block the previously started send operation)
-
-## References
-For all two factor authentication related method details, refer to [Two Factor Authentication](/developer/references/nodered/1.0.0#twofactor-send-code).

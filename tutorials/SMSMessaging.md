@@ -20,7 +20,7 @@ Before moving to how the response body looks, let's walk through the highlights 
   - sip:6131234567@domain
 + `Message` field contains the text message in `UTF-8` encoded format.
 
-> The number provided in `Sender address` field should be purchased by the account and assigned to the project, otherwise $KANDY$ replies back with a Forbidden error.
+> The number provided in `Sender address` field should be purchased by the account and assigned to the project or user, otherwise $KANDY$ replies back with a Forbidden error.
 
 Now, let's check the successful response:
 
@@ -50,11 +50,11 @@ The `Analyze Notification` node can we used to subscribe and parse/analyze the n
 ### Subscription
 You subscribe to receive inbound SMS:
 
-+ `Destination address` is an optional parameter to indicate which SMS DID number has been desired to receive SMS messages. Corresponding number should be one of the assigned/purchased numbers of the project, otherwise $KANDY$ replies back with Forbidden error. Also not providing this parameter triggers $KANDY$ to use the default assigned DID number against this user, in which case the response message for the subscription contains the `Destination address` field. It is highly recommended to provide `destination address` parameter.
++ `Destination address` is an optional parameter to indicate which SMS DID number has been desired to receive SMS messages. Corresponding number should be one of the assigned/purchased numbers of the project or user, otherwise $KANDY$ replies back with Forbidden error. Also not providing this parameter triggers $KANDY$ to use the default assigned DID number against this project or user, in which case the response message for the subscription contains the `Destination address` field. It is highly recommended to provide `destination address` parameter.
 + `webhook URL` is a webhook that is present in your application which is accessible from the public web. The sms notifications would be delivered to the webhook and the received notification can be passed on to this node and can be parsed in a homogeneous format.
 
 > + For every number required to receive incoming SMS, there should be an individual subscription.
-> + When a number has been unassigned from a project, all corresponding inbound SMS subscriptions are cancelled and `sms_subscription_cancellation_notification` notification is sent.
+> + When a number has been unassigned from a project or user, all corresponding inbound SMS subscriptions are cancelled and `sms_subscription_cancellation_notification` notification is sent.
 
 Now, you are ready to receive inbound SMS messages via webhook, for example - 'https://myapp.com/inbound-sms/webhook'.
 
@@ -96,7 +96,3 @@ With the help of this notification, clients can sync their view on sent SMS mess
 > In order to receive this notification, user should have inbound SMS subscription. Obviously this notification cannot be provided when only send SMS has been used without an SMS related subscription.
 
 > For trial users, maximum number of SMS messages stored is 1000. When new messages are inserted to history, oldest ones are being removed.
-
-
-## References
-For all SMS related method details, refer to [SMS](/developer/references/nodered/1.0.0#sms-send).
