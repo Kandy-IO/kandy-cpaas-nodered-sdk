@@ -19,8 +19,8 @@ Each node must have `CPaaS Credentials` before using it which can be either be a
 
 Before starting, you need to learn following information from your CPaaS account, specifically from Developer Portal.
 
-Log into your Developer Portal account. If you want to authenticate using CPaaS user credentials, the configuration information required should be under:
-+ Home -> Personal Profile (top right corner) -> Details
+If you want to authenticate using CPaaS account's credentials, the configuration information required should be under:
++ `Home` -> `Personal Profile` (top right corner) -> `Details`
 > + `Account client ID` should be mapped to `client ID`
 > + `Email` should be mapped to `Email`
 > + Your account password should be mapped to `Password`
