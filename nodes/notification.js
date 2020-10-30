@@ -10,10 +10,11 @@ module.exports = function(RED) {
     const destinationAddress = config.destinationAddress.trim()
     const webhookURL = config.webhook.trim()
 
-    client.conversation.subscribe({ webhookURL, destinationAddress })
-      .error(e => {
-        console.error(`Failed to subscribe webhook endpoint: ${webhookURL}`, e)
-      })
+    try {
+      client.conversation.subscribe({ webhookURL, destinationAddress })
+    } catch (e) {
+      console.error(`Failed to subscribe webhook endpoint: ${webhookURL}`, e)
+    }
 
     this.on('input', function(msg) {
       const cpaas_response = client.notification.parse(msg.payload)
